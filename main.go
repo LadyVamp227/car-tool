@@ -1,17 +1,22 @@
 package main
 
 import (
-	"car-tool/handlers"
-	"github.com/gorilla/mux"
+	"car-tool/server"
+	"car-tool/storage"
 	"log"
-	"net/http"
 )
 
 func main() {
-	r := mux.NewRouter()
-	r.HandleFunc("/", handlers.Hello)
-	err := http.ListenAndServe(":8080", r)
+	db, err := storage.NewDatabase()
 	if err != nil {
-		log.Fatal(err)
+		log.Panicln(err)
+	}
+	s, err := server.NewServer(db)
+	if err != nil {
+		log.Panicln("Can't create server")
+	}
+	err = s.StartServer(s.SetupRouter())
+	if err != nil {
+		log.Panicln("Can't start server")
 	}
 }
