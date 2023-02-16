@@ -7,6 +7,6 @@ import (
 
 func (s *Server) SetupRouter() *mux.Router {
 	r := mux.NewRouter()
-	r.HandleFunc("/", handlers.Hello)
+	r.HandleFunc("/car", handlers.GetCarList).Methods("GET")
 	return r
 }
